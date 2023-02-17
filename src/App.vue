@@ -1,19 +1,14 @@
-
-
 <template>
-<!--  <div>-->
-<!--    <a href="https://vitejs.dev" target="_blank">-->
-<!--      <img src="/vite.svg" class="logo" alt="Vite logo" />-->
-<!--    </a>-->
-<!--    <a href="https://vuejs.org/" target="_blank">-->
-<!--      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />-->
-<!--    </a>-->
-<!--  </div>-->
-<!--  <NButton>按钮</NButton>-->
-  <router-view></router-view>
+  <div>
+<!--    登陆成功信息组件-->
+    <n-message-provider>
+<!--      加载条-->
+      <n-loading-bar-provider>
+        <router-view></router-view>
+      </n-loading-bar-provider>
 
-  <router-link to="/">go to home</router-link>|
-  <router-link to="/login">go to login</router-link>
+    </n-message-provider>
+  </div>
 </template>
 
 <script setup lang="ts">

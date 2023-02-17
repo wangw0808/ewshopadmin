@@ -54,54 +54,76 @@ import {ref,reactive} from "vue";
 import {PersonOutline,LockClosedOutline} from "@vicons/ionicons5"
 import {useUserStore} from "../../store/user";
 import {useRouter} from "vue-router";
+import { useMessage } from 'naive-ui';
 
 const formRef = ref();
+// 如果loading是一个true的话，就会在登陆的时候有一个加载的状态
 const loading = ref(false);
+// 把user里面的userUserStore方法值赋值给usestore
 const userStore = useUserStore();
 const router = useRouter();
-
+const message = useMessage();
+// 是一个全局变量
+(<any>window).$message = useMessage();
+// (<any>window).$message = useMessage();
     // 定义一个接口
     interface FormState {
       // 属性类型
       email:string,
       password:string,
     }
+
     // 定义数据模型
     const formInline = reactive({
       username:'super@a.com',
       password:'123123',
     })
 
+      // 验证规则
     const rules = {
-      // 失去焦点时显示的数据
-      username:{require:true,message:'请输入用户名',trigger:'blur'},
-      password:{require:true,message:'请输入密码',trigger: 'blur'},
+      // 失去焦点时触发显示的数据
+      username:{required:true,message:'请输入用户名',trigger:'blur'},
+      password:{required:true,message:'请输入密码',trigger: 'blur'},
     }
-    // 登录
+
+    // 点击登录事件
     const handleSubmit = () => {
+      // 打印出定义的数据模型
       console.log(formInline)
+
+      // 表单验证
       formRef.value.validate(async (errors:any) => {
         console.log(!errors)
         if(!errors){
           // 有错误就返回，不执行，不在往下发送请求
           // return
           // 接收数据
+          // 从frominline里面解构出来username，password
           const {username,password} = formInline;
           // 显示登录中
           loading.value = true;
           // 调整数据结构
+          // params对象的类型是formstate接口里面设置的类型
           const params:FormState = {
+            //必须具有formstate接口里面的所有属性和方法
             email:username,
-            password
+            password,//password:password简写为password
           };
           try{
             // 执行登陆操作
             console.log(params)
-            // res是userStore里面返回的数据
+            // res是userStore里面返回的数据，userstore是导入并定义的值
+            // params传递给user里面login里面的login方法
             userStore.login(params).then(_res => {
-              loading.value = false;
               console.log(_res);
-
+              // 关闭窗口
+              // Comment(res);
+              // loading的值设置为false
+              loading.value = false;
+              // 提示登陆成功
+              message.success('登陆成功')
+              // 跳转到首页
+              router.push({name:'dashboard'});
             }).catch(()=>{
               loading.value = false
             })
