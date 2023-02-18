@@ -1,5 +1,5 @@
 import {defineStore} from "pinia";
-import {login,user} from "../api/auth";
+import {login,user} from "@/api/auth";
 
 // 定义store的类型
 export interface IUserState{
@@ -47,6 +47,13 @@ export const useUserStore = defineStore({
         },
         getPermissions():string[]{
             return this.permissions;
+        },
+        async getUserInfo():Promise<object>{
+            // 判断this.info是否是空对象或是不存在，不存在时调用getUser方法
+            if(this.info?.id){
+                await useUserStore().getUser();
+            }
+            return this.info;
         }
     },
     // 给状态设置值
@@ -75,7 +82,7 @@ export const useUserStore = defineStore({
             this.permissions = permissions;
         },
         // 异步登录的方法
-        // 接收从index.vue里面传递过来的params{password,username}
+        // 接收从login/index.vue里面传递过来的params{password,username}
         async login(userinfo:object){
             // login的方法实现
             try{

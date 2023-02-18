@@ -52,7 +52,7 @@
 <script lang="ts" setup>
 import {ref,reactive} from "vue";
 import {PersonOutline,LockClosedOutline} from "@vicons/ionicons5"
-import {useUserStore} from "../../store/user";
+import {useUserStore} from "@/store/user";
 import {useRouter} from "vue-router";
 import { useMessage } from 'naive-ui';
 
@@ -113,7 +113,7 @@ const message = useMessage();
             // 执行登陆操作
             console.log(params)
             // res是userStore里面返回的数据，userstore是导入并定义的值
-            // params传递给user里面login里面的login方法
+            // params传递给store/user里面的login方法
             userStore.login(params).then(_res => {
               console.log(_res);
               // 关闭窗口
